@@ -7,7 +7,7 @@ import (
 
 const (
 	HeaderXRequestID = "X-Request-ID"
-	ContextRequestID = "requestID"
+	ContextRequestID = "request_id"
 )
 
 // RequestID adds a unique ID to every request

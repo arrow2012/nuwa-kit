@@ -9,10 +9,10 @@ import (
 
 // Response standard structure
 type Response struct {
-	Code    int         `json:"code"`               // Business Code
-	Message string      `json:"message"`            // Message
-	Data    interface{} `json:"data,omitempty"`     // Data payload
-	TraceID string      `json:"trace_id,omitempty"` // Request ID for tracing
+	Code      int         `json:"code"`                 // Business Code
+	Message   string      `json:"message"`              // Message
+	Data      interface{} `json:"data,omitempty"`       // Data payload
+	RequestID string      `json:"request_id,omitempty"` // Request ID for tracing
 }
 
 // PageResult standard structure for pagination
@@ -30,10 +30,10 @@ const ContextKeyRequestID = "requestID"
 func Success(c *gin.Context, data interface{}) {
 	rid := c.GetString(ContextKeyRequestID)
 	c.JSON(http.StatusOK, Response{
-		Code:    0,
-		Message: "success",
-		Data:    data,
-		TraceID: rid,
+		Code:      0,
+		Message:   "success",
+		Data:      data,
+		RequestID: rid,
 	})
 }
 
@@ -54,8 +54,8 @@ func Error(c *gin.Context, err error) {
 	}
 
 	c.JSON(apiErr.HTTPStatus(), Response{
-		Code:    apiErr.BusinessCode(),
-		Message: apiErr.Message(),
-		TraceID: rid,
+		Code:      apiErr.BusinessCode(),
+		Message:   apiErr.Message(),
+		RequestID: rid,
 	})
 }

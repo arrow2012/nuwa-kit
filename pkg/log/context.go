@@ -19,7 +19,7 @@ func C(ctx context.Context) *zap.Logger {
 	// TraceID
 	if requestID := ctx.Value("request_id"); requestID != nil {
 		if s, ok := requestID.(string); ok {
-			fields = append(fields, zap.String("trace_id", s))
+			fields = append(fields, zap.String("request_id", s))
 		}
 	}
 

@@ -13,6 +13,7 @@ type HybridCache struct {
 	local  Cache
 	remote Cache
 	group  singleflight.Group
+	l1Inv  *L1Invalidator // L1 invalidator for cross-pod sync
 }
 
 // NewHybridCache creates a new HybridCache
@@ -105,7 +106,29 @@ func (c *HybridCache) GetOrSet(ctx context.Context, key string, expiration time.
 	return v.(string), nil
 }
 
+// StartL1Invalidator starts the L1 cache invalidator that subscribes to Redis Pub/Sub
+// for cross-pod cache synchronization. This should be called after creating HybridCache.
+func (c *HybridCache) StartL1Invalidator(rdb *redis.Client) error {
+	if rdb == nil {
+		return nil
+	}
+	c.l1Inv = NewL1Invalidator(c.local, rdb)
+	return c.l1Inv.Start()
+}
+
+// StopL1Invalidator stops the L1 cache invalidator
+func (c *HybridCache) StopL1Invalidator() error {
+	if c.l1Inv != nil {
+		return c.l1Inv.Stop()
+	}
+	return nil
+}
+
 func (c *HybridCache) Close() error {
+	// Stop L1 invalidator first
+	if c.l1Inv != nil {
+		c.l1Inv.Stop()
+	}
 	c.local.Close()
 	return c.remote.Close()
 }

@@ -2,7 +2,6 @@ package cache
 
 import (
 	"context"
-	"log"
 	"strings"
 	"sync"
 	"time"
@@ -63,7 +62,6 @@ func (i *L1Invalidator) Start() error {
 	i.wg.Add(1)
 	go i.listen()
 
-	log.Printf("[INFO] L1Invalidator: Started listening on channel %s", L1InvalidateChannel)
 	return nil
 }
 
@@ -134,9 +132,9 @@ func (i *L1Invalidator) Stop() error {
 
 	select {
 	case <-done:
-		log.Println("[INFO] L1Invalidator: Stopped gracefully")
+		// Stopped gracefully
 	case <-time.After(5 * time.Second):
-		log.Println("[WARN] L1Invalidator: Stop timeout, forcing shutdown")
+		// Timeout, force shutdown
 	}
 
 	return nil

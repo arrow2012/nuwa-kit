@@ -19,7 +19,7 @@ type ConsulConfigCenter struct {
 
 // NewConsulConfigCenter creates a new Consul configuration center
 func NewConsulConfigCenter(opts *ConfigCenterOptions) (*ConsulConfigCenter, error) {
-	log.Infof("NewConsulConfigCenter %#v", opts)
+	log.Debugf("NewConsulConfigCenter %#v", opts)
 	v := viper.New()
 	v.AddRemoteProvider("consul", opts.Address, opts.Path)
 	v.SetConfigType(opts.ContentType)

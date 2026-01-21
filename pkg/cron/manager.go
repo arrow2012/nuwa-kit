@@ -176,11 +176,11 @@ func (m *Manager) wrapper(job *Job) func() {
 			}
 		}()
 
-		log.Info("Starting cron job", zap.String("job", job.Name))
+		log.Debug("Starting cron job", zap.String("job", job.Name))
 		start := time.Now()
 		job.Cmd()
 		duration := time.Since(start)
-		log.Info("Finished cron job", zap.String("job", job.Name), zap.Duration("duration", duration))
+		log.Debug("Finished cron job", zap.String("job", job.Name), zap.Duration("duration", duration))
 	}
 }
 
